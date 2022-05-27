@@ -1,0 +1,32 @@
+--SEARCH FOR DUPLICATES 
+SELECT  customer_id,
+ store_id,
+ first_name,
+ last_name,
+ email,
+ address_id,
+ activebool,
+ create_date,
+ last_update,
+ active,
+COUNT(*)
+FROM customer
+GROUP BY  customer_id,
+ store_id,
+ first_name,
+ last_name,
+ email,
+ address_id,
+ activebool,
+ create_date,
+ last_update,
+ activeHAVING COUNT(*)>1;
+ customer_id | store_id | first_name | last_name | email | address_id | activebool | create_date | last_update | active | count
+-------------+----------+------------+-----------+-------+------------+------------+-------------+-------------+--------+-------
+(0 rows)
+--no result set means no duplicates found
+--SEARCH FOR NON UNIFORM OR INCORRECT DATA 
+SELECT DISTINCT customer_id
+FROM customer
+--no result set means no non uniform or incorrect found
+--I REPEATED THIS PROCESS FOR ALL COLUMNS
