@@ -1,0 +1,116 @@
+# Check for Dirty Data
+--SEARCH FOR DUPLICATES 
+SELECT film_id,    
+ title,
+ description,
+ release_year,
+ language_id,
+ rental_duration,
+ rental_rate,
+ length,
+ replacement_cost,
+ rating,
+ last_update,
+ special_features,
+ fulltext,
+ COUNT (*)
+ FROM FILM
+ GROUP BY film_id,    
+ title,
+ description,
+ release_year,
+ language_id,
+ rental_duration,
+ rental_rate,
+ length,
+ replacement_cost,
+ rating,
+ last_update,
+ special_features,
+ fulltext
+ HAVING COUNT(*) > 1
+--no result set means no duplicates found
+
+--SEARCH FOR NON UNIFORM OR INCORRECT DATA 
+SELECT DISTINCT film_id
+FROM film
+--no result set means no non uniform or incorrect found
+I REPEATED THIS PROCESS FOR ALL COLUMNS
+
+--search for null
+SELECT column
+FROM table
+WHERE column = NULL
+
+# Summarize data
+--Film_id, title, description, fulltext are all unique so there are no statistics to perform.
+--Release_year, language_id and last_update only have 1 variable so there are no statistics to perform.
+--RENT
+ SELECT MIN(rental_rate) AS min_rent,
+        MAX(rental_rate) AS max_rent,
+        AVG(rental_rate) AS avg_rent,
+        COUNT(rental_rate) AS count_rent_values,
+        COUNT(*) AS count_rows
+ FROM film;
+ min_rent | max_rent |      avg_rent      | count_rent_values | count_rows
+----------+----------+--------------------+-------------------+------------
+     0.99 |     4.99 | 2.9800000000000000 |              1000 |       1000
+(1 row)
+
+ SELECT MIN(rental_duration) AS min_duration,
+        MAX(rental_duration) AS max_duration,
+        AVG(rental_duration) AS avg_duration,
+        COUNT(rental_duration) AS count_duration_values,
+        COUNT(*) AS count_rows
+ FROM film;
+ min_duration | max_duration |    avg_duration    | count_duration_values | count_rows
+--------------+--------------+--------------------+-----------------------+------------
+            3 |            7 | 4.9850000000000000 |                  1000 |       1000
+(1 row)
+
+--LENGTH
+ SELECT MIN(length) AS min_length,
+        MAX(length) AS max_length,
+        AVG(length) AS avg_length,
+        COUNT(length) AS count_length_values,
+        COUNT(*) AS count_rows
+ FROM film;
+ min_length | max_length |      avg_length      | count_length_values | count_rows
+------------+------------+----------------------+---------------------+------------
+         46 |        185 | 115.2720000000000000 |                1000 |       1000
+
+ SELECT MIN(replacement_cost) AS min_replacement_cost,
+        MAX(replacement_cost) AS max_replacement_cost,
+        AVG(replacement_cost) AS avg_replacement_cost,
+        COUNT(replacement_cost) AS count_replacement_cost_values,
+        COUNT(*) AS count_rows
+ FROM film;
+ min_replacement_cost | max_replacement_cost | avg_replacement_cost | count_replacement_cost_values | count_rows
+----------------------+----------------------+----------------------+-------------------------------+------------
+                 9.99 |                29.99 |  19.9840000000000000 |                          1000 |       1000
+(1 row)
+
+--RATING
+SELECT mode() WITHIN GROUP (ORDER BY rating)
+       AS modal_value
+FROM film;
+ modal_value
+-------------
+ PG-13
+(1 row)
+
+
+SELECT rating,
+       COUNT(*)
+FROM film
+GROUP BY rating
+ORDER BY COUNT(*);
+
+ rating | count
+--------+-------
+ G      |   178
+ PG     |   194
+ R      |   195
+ NC-17  |   210
+ PG-13  |   223
+(5 rows)
