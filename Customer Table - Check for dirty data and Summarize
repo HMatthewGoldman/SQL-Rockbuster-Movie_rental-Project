@@ -1,0 +1,82 @@
+## SEARCH FOR DUPLICATES 
+SELECT  customer_id,
+ store_id,
+ first_name,
+ last_name,
+ email,
+ address_id,
+ activebool,
+ create_date,
+ last_update,
+ active,
+COUNT(*)
+FROM customer
+GROUP BY  customer_id,
+ store_id,
+ first_name,
+ last_name,
+ email,
+ address_id,
+ activebool,
+ create_date,
+ last_update,
+ activeHAVING COUNT(*)>1;
+ customer_id | store_id | first_name | last_name | email | address_id | activebool | create_date | last_update | active | count
+-------------+----------+------------+-----------+-------+------------+------------+-------------+-------------+--------+-------
+(0 rows)
+--no result set means no duplicates found
+
+## SEARCH FOR NON UNIFORM OR INCORRECT DATA 
+SELECT DISTINCT customer_id
+FROM customer
+--no result set means no non uniform or incorrect found
+--I REPEATED THIS PROCESS FOR ALL COLUMNS
+## Summarize your data
+Cutomer_id,  first_name, last_name, email, address_id and activebool are all unique so there are no statistics to perform
+Create_date, last_update only have 1 variable so there are no statistics to perform
+-- STORE_ID
+SELECT DISTINCT store_id FROM customer;
+ store_id
+----------
+        1
+        2
+(2 rows)
+
+SELECT mode() WITHIN GROUP (ORDER BY store_id)
+       AS modal_value
+FROM customer;
+ modal_value
+-------------
+           1
+(1 row)
+
+SELECT store_id,
+       COUNT(*)
+FROM customer
+GROUP BY store_id
+ORDER BY COUNT(*);
+ store_id | count
+----------+-------
+        2 |   273
+        1 |   326
+(2 rows)
+
+-- ACTIVE
+SELECT mode() WITHIN GROUP (ORDER BY active)
+       AS modal_value
+FROM customer;
+ modal_value
+-------------
+           1
+(1 row)
+
+SELECT active,
+       COUNT(*)
+FROM customer
+GROUP BY active
+ORDER BY COUNT(*);
+ active | count
+--------+-------
+      0 |    15
+      1 |   584
+(2 rows)
