@@ -1,0 +1,46 @@
+STORE_ID
+SELECT DISTINCT store_id FROM customer;
+ store_id
+----------
+        1
+        2
+(2 rows)
+
+SELECT mode() WITHIN GROUP (ORDER BY store_id)
+       AS modal_value
+FROM customer;
+ modal_value
+-------------
+           1
+(1 row)
+
+SELECT store_id,
+       COUNT(*)
+FROM customer
+GROUP BY store_id
+ORDER BY COUNT(*);
+ store_id | count
+----------+-------
+        2 |   273
+        1 |   326
+(2 rows)
+
+ACTIVE
+SELECT mode() WITHIN GROUP (ORDER BY active)
+       AS modal_value
+FROM customer;
+ modal_value
+-------------
+           1
+(1 row)
+
+SELECT active,
+       COUNT(*)
+FROM customer
+GROUP BY active
+ORDER BY COUNT(*);
+ active | count
+--------+-------
+      0 |    15
+      1 |   584
+(2 rows)
